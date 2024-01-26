@@ -19,7 +19,7 @@ Installation
 
 .. code-block:: console
 
-    > pip install ipx800v3
+    > pip install git+https://github.com/Xavieto/ipx800v3.git#egg=ipx800v3
 
 Usage
 -----
@@ -30,20 +30,17 @@ Usage
 
     from ipx800v3 import ipx800v3
 
-    ipx = ipx800("http://your-device-ip", "username", "password")
+    ipx = ipx800v3(url="http://your-device-ip", username="username", password="password")
 
     out1 = ipx.output[0]
-
     out1.status  # => return a Boolean
-
     out1.on()
-
     out1.off()
 
 Links
 -----
 
-* GCE IPX800V3 API: 
+* GCE IPX800V3 API: https://download.gce-electronics.com/data/007_IPX800_V3/IPX_API.pdf
 
 Licence
 -------
