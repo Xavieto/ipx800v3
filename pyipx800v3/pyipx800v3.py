@@ -17,8 +17,10 @@ class IPX800V3:
         inputs  the physical inputs
     """
 
-    def __init__(self, url:str, username : str ="username", password : str ="password"):
-        self.url = url
+    def __init__(self, host:str, port:str, username : str = "username", password : str = "password"):
+        self.host = host
+        self.port = port
+        self.url = f"http://{self.host}:{self.port}"
         self.username = username
         self.password = password
         self.outputs = GenericSlice(self, Output, f"/api/xdevices.json", {"cmd": "20"})
@@ -89,6 +91,11 @@ class BaseSwitch(IPX800V3):
         response = self._request(url=f"/api/xdevices.json", params=params)
         return response[f"{self._prefix}{self.id}"] == 1
 
+    def ping(self) -> bool:
+        """simple query to xdevices.json api and check value of return to ping the IPX"""
+        response = self._request(url="/api/xdevices.json",params={})
+        return response["product"] == "IPX800_V3"
+
     def on(self) -> bool:
         """Turn on and return True if it was successful."""
         params = {f"set{self.id}": 1}
@@ -99,6 +106,14 @@ class BaseSwitch(IPX800V3):
         """Turn off and return True if it was successful."""
         params = {f"set{self.id}": 0}
         self._request(url=f"/preset.htm", params=params, json=False)
+        return True
+    
+    def toggle(self) -> bool:
+        """Toggle the output and return True if successful."""
+        if self.status == 1:
+            self.off()
+        else:
+            self.on()
         return True
 
     def __repr__(self) -> str:
@@ -125,4 +140,7 @@ class Input(BaseSwitch):
         raise NotImplementedError
     
     def off(self):
+        raise NotImplementedError
+    
+    def toggle(self):
         raise NotImplementedError

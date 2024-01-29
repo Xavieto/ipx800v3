@@ -19,7 +19,7 @@ Installation
 
 .. code-block:: console
 
-    > pip install git+https://github.com/Xavieto/ipx800v3.git#egg=ipx800v3
+    > pip install git+https://github.com/Xavieto/ipx800v3.git#egg=pyipx800v3
 
 Usage
 -----
@@ -28,9 +28,9 @@ Usage
 
 .. code-block:: python
 
-    from ipx800v3 import ipx800v3
+    from pyipx800v3 import IPX800V3
 
-    ipx = ipx800v3(url="http://your-device-ip", username="username", password="password")
+    ipx = IPX800V3(host="your-device-ip", port="80", username="username", password="password")
 
     out1 = ipx.output[0]
     out1.status  # => return a Boolean
