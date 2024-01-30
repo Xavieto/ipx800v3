@@ -17,7 +17,7 @@ class IPX800V3:
         inputs  the physical inputs
     """
 
-    def __init__(self, host:str, port:str, username : str = "username", password : str = "password"):
+    def __init__(self, host:str, port : int = 80, username : str = "username", password : str = "password"):
         self.host = host
         self.port = port
         self.url = f"http://{self.host}:{self.port}"
@@ -25,6 +25,11 @@ class IPX800V3:
         self.password = password
         self.outputs = GenericSlice(self, Output, f"/api/xdevices.json", {"cmd": "20"})
         self.inputs = GenericSlice(self, Input, f"/api/xdevices.json", {"cmd": "10"})
+
+    def ping(self) -> bool:
+        """simple query to xdevices.json api and check value of return to ping the IPX"""
+        response = self._request(url=f"/api/xdevices.json",params={})
+        return isinstance(response, dict)
 
     def _request(self, url: str, params: dict, json : bool = True):
         # (bug) IPX4, key must be the first parameter otherwise some
@@ -78,7 +83,7 @@ class BaseSwitch(IPX800V3):
     """Base class to abstract switch operations."""
 
     def __init__(self, ipx, prefix:str, id:int, name:str, cmd:str):
-        super().__init__(ipx.url, ipx.username, ipx.password)
+        super().__init__(host=ipx.host, port=ipx.port, username=ipx.username, password=ipx.password)
         self.id = id
         self._name = name
         self._cmd = cmd
@@ -90,11 +95,6 @@ class BaseSwitch(IPX800V3):
         params = {"cmd": self._cmd}
         response = self._request(url=f"/api/xdevices.json", params=params)
         return response[f"{self._prefix}{self.id}"] == 1
-
-    def ping(self) -> bool:
-        """simple query to xdevices.json api and check value of return to ping the IPX"""
-        response = self._request(url="/api/xdevices.json",params={})
-        return response["product"] == "IPX800_V3"
 
     def on(self) -> bool:
         """Turn on and return True if it was successful."""

@@ -1,1 +1,5 @@
-.vscode/
+__pycache__
+test.py
+dist
+build
+src/*.egg-info
