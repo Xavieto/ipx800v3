@@ -19,7 +19,7 @@ Installation
 
 .. code-block:: console
 
-    > pip install git+https://github.com/Xavieto/ipx800v3.git#egg=pyipx800v3
+    > pip install pyipx800v3
 
 Usage
 -----
